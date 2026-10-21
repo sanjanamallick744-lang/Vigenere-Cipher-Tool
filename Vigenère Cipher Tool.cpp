@@ -1,143 +1,158 @@
+
 #include <iostream>
 #include <string>
 #include <cctype>
+#include <limits>
 
 using namespace std;
 
-string encrypt(string text, string key)
+// Remove non-alphabetic characters from the key
+string cleanKey(string key)
 {
-    string result = "";
-    int j = 0;
+    string newKey = "";
 
-    for (int i = 0; i < text.length(); i++)
+    for (int i = 0; i < key.length(); i++)
     {
-        char ch = text[i];
+        unsigned char ch = key[i];
 
         if (isalpha(ch))
-        {
-            char base;
-
-            if (isupper(ch))
-                base = 'A';
-            else
-                base = 'a';
-
-            int textValue = ch - base;
-            int keyValue = toupper(key[j % key.length()]) - 'A';
-
-            char encrypted = (textValue + keyValue) % 26 + base;
-
-            result += encrypted;
-            j++;
-        }
-        else
-        {
-            result += ch;
-        }
+            newKey += toupper(ch);
     }
 
-    return result;
+    return newKey;
 }
 
-string decrypt(string text, string key)
+// Perform encryption or decryption
+string processCipher(string message, string key, bool encryptMode)
 {
-    string result = "";
-    int j = 0;
+    string output = "";
+    int keyIndex = 0;
 
-    for (int i = 0; i < text.length(); i++)
+    for (int i = 0; i < message.length(); i++)
     {
-        char ch = text[i];
+        char ch = message[i];
 
-        if (isalpha(ch))
+        if (isalpha(static_cast<unsigned char>(ch)))
         {
-            char base;
-
-            if (isupper(ch))
-                base = 'A';
-            else
-                base = 'a';
+            char base = isupper(static_cast<unsigned char>(ch))
+                        ? 'A' : 'a';
 
             int textValue = ch - base;
-            int keyValue = toupper(key[j % key.length()]) - 'A';
+            int shift = key[keyIndex % key.length()] - 'A';
 
-            char decrypted = (textValue - keyValue + 26) % 26 + base;
+            int result;
 
-            result += decrypted;
-            j++;
+            if (encryptMode)
+                result = (textValue + shift) % 26;
+            else
+                result = (textValue - shift + 26) % 26;
+
+            output += char(result + base);
+            keyIndex++;
         }
         else
         {
-            result += ch;
+            output += ch;
         }
     }
 
-    return result;
+    return output;
+}
+
+// Display the encryption or decryption result
+void runCipher(bool encryptMode)
+{
+    string message, key;
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    cout << "\nEnter your message: ";
+    getline(cin, message);
+
+    cout << "Enter your key: ";
+    getline(cin, key);
+
+    key = cleanKey(key);
+
+    if (key.empty())
+    {
+        cout << "\nError: Enter at least one alphabet in the key.\n";
+        return;
+    }
+
+    string result = processCipher(message, key, encryptMode);
+
+    cout << "\n----------------------------------\n";
+
+    if (encryptMode)
+        cout << "Encrypted Message: ";
+    else
+        cout << "Decrypted Message: ";
+
+    cout << result << endl;
+    cout << "Key Length: " << key.length() << endl;
+    cout << "----------------------------------\n";
+}
+
+// Demonstrate a known-key brute-force limitation
+void securityInfo()
+{
+    cout << "\n========== SECURITY INFORMATION ==========\n";
+    cout << "Cipher: Vigenere Cipher\n";
+    cout << "Type: Polyalphabetic substitution cipher\n";
+    cout << "Key: Repeating alphabetic keyword\n";
+    cout << "Limitation: Repeating keys can reveal patterns.\n";
+    cout << "Note: This is an educational cipher, not modern security.\n";
+    cout << "==========================================\n";
 }
 
 int main()
 {
     int choice;
-    string text, key;
 
-    while (true)
+    do
     {
-        cout << "\n============================\n";
-        cout << "     VIGENERE CIPHER TOOL\n";
-        cout << "============================\n";
-        cout << "1. Encrypt\n";
-        cout << "2. Decrypt\n";
-        cout << "3. Exit\n";
-        cout << "Enter your choice: ";
-        cin >> choice;
+        cout << "\n====================================\n";
+        cout << "       VIGENERE CIPHER SYSTEM\n";
+        cout << "====================================\n";
+        cout << "1. Encrypt Message\n";
+        cout << "2. Decrypt Message\n";
+        cout << "3. View Cipher Security Info\n";
+        cout << "4. Exit\n";
+        cout << "------------------------------------\n";
+        cout << "Choose an option: ";
 
-        cin.ignore();
-
-        if (choice == 1)
+        if (!(cin >> choice))
         {
-            cout << "Enter message: ";
-            getline(cin, text);
-
-            cout << "Enter key: ";
-            getline(cin, key);
-
-            if (key.length() == 0)
-            {
-                cout << "Key cannot be empty!\n";
-            }
-            else
-            {
-                cout << "\nEncrypted Message: ";
-                cout << encrypt(text, key) << endl;
-            }
+            cout << "Invalid input! Enter a number.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
         }
-        else if (choice == 2)
+
+        switch (choice)
         {
-            cout << "Enter encrypted message: ";
-            getline(cin, text);
+            case 1:
+                runCipher(true);
+                break;
 
-            cout << "Enter key: ";
-            getline(cin, key);
+            case 2:
+                runCipher(false);
+                break;
 
-            if (key.length() == 0)
-            {
-                cout << "Key cannot be empty!\n";
-            }
-            else
-            {
-                cout << "\nDecrypted Message: ";
-                cout << decrypt(text, key) << endl;
-            }
+            case 3:
+                securityInfo();
+                break;
+
+            case 4:
+                cout << "\nThank you for using Vigenere Cipher System!\n";
+                break;
+
+            default:
+                cout << "Invalid choice! Select 1 to 4.\n";
         }
-        else if (choice == 3)
-        {
-            cout << "Program closed.\n";
-            break;
-        }
-        else
-        {
-            cout << "Invalid choice!\n";
-        }
-    }
+
+    } while (choice != 4);
 
     return 0;
 }
