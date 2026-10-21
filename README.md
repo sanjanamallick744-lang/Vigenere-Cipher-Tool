@@ -1,82 +1,94 @@
-# 🔐 Vigenère Cipher Tool
+# 🔐 Vigenère Cipher Toolkit
 
-A simple **C++ console-based encryption and decryption tool** implementing the Vigenère Cipher.
+## 📌 About the Project
+The **Vigenère Cipher Toolkit** is a C++ cybersecurity mini-project that demonstrates classical cryptography through message encryption and decryption. It uses a keyword-based substitution technique to transform readable text into ciphertext and recover the original message using the same key.
 
-## 📌 About
-
-The Vigenère Cipher is a classical encryption technique that uses a **keyword** to encrypt and decrypt messages. This project demonstrates the basic concept of substitution-based cryptography using C++.
+The project also includes additional utilities for file processing, encryption history, and character frequency analysis.
 
 ## ✨ Features
-
-* 🔒 Encrypt messages using a secret key
-* 🔓 Decrypt encrypted messages
-* 🔑 User-defined encryption key
-* 📝 Supports spaces and special characters
-* 💻 Simple console-based interface
-* ⚡ Easy to use with Dev-C++
+- **Message Encryption:** Converts plaintext into ciphertext using a secret key.
+- **Message Decryption:** Recovers the original message using the correct key.
+- **Key Validation:** Checks that the encryption key contains valid alphabetic characters.
+- **Encryption History:** Keeps track of operations performed during the current session.
+- **File Processing:** Supports encrypting and decrypting text files.
+- **Character Frequency Analysis:** Counts letter occurrences to help examine message patterns.
+- **Input Validation:** Handles invalid menu choices and empty inputs.
+- **Interactive Menu:** Provides a simple, user-friendly console interface.
 
 ## 🛠️ Technologies Used
+- **Programming Language:** C++
+- **Libraries:** `iostream`, `string`, `cctype`, `fstream`, and other standard C++ libraries as required.
+- **Concepts:** Classical Cryptography, String Manipulation, File Handling, Input Validation, and Frequency Analysis.
 
-* **Language:** C++
-* **IDE:** Dev-C++
-* **Concept:** Vigenère Cipher / Classical Cryptography
+## ⚙️ How It Works
+The Vigenère cipher uses a repeating alphabetic key to determine how far each letter is shifted through the alphabet.
 
-## 🚀 How to Run
+**Encryption formula:**
 
-1. Download or clone this repository.
-2. Open the `.cpp` file in **Dev-C++**.
-3. Compile and run the program.
-4. Select:
+`C = (P + K) mod 26`
 
-   * `1` → Encrypt
-   * `2` → Decrypt
-   * `3` → Exit
-5. Enter your message and encryption key.
+**Decryption formula:**
+
+`P = (C - K + 26) mod 26`
+
+Where:
+- `P` = Plaintext letter value
+- `C` = Ciphertext letter value
+- `K` = Key letter value
+
+Spaces, numbers, and punctuation are preserved rather than encrypted.
+
+## ▶️ How to Run
+
+### 1. Compile the Program
+Install a C++ compiler such as GCC or MinGW and run:
+
+```bash
+g++ -std=c++11 vigenere_cipher_toolkit.cpp -o vigenere
+```
+
+### 2. Execute the Program
+
+**Windows:**
+```bash
+.\vigenere.exe
+```
+
+**Linux:**
+```bash
+./vigenere
+```
 
 ## 💻 Example
 
+**Input:**
 ```text
-============================
-     VIGENERE CIPHER TOOL
-============================
-1. Encrypt
-2. Decrypt
-3. Exit
+Message: HELLO WORLD
+Key: KEY
+```
 
-Enter your choice: 1
-Enter message: HELLO WORLD
-Enter key: KEY
-
+**Output:**
+```text
 Encrypted Message: RIJVS UYVJN
 ```
 
-### Decryption
+Decrypting the ciphertext with the same key restores the original message.
 
-```text
-Enter your choice: 2
-Enter encrypted message: RIJVS UYVJN
-Enter key: KEY
+## 🎯 Learning Outcomes
+- Understanding the fundamentals of classical encryption.
+- Implementing encryption and decryption algorithms in C++.
+- Applying string operations and modular arithmetic.
+- Working with file input/output.
+- Understanding basic cryptanalysis through letter frequency analysis.
+- Improving programming structure and input validation.
 
-Decrypted Message: HELLO WORLD
-```
-
-## 📚 Concepts Learned
-
-* String manipulation
-* Functions in C++
-* Loops and conditional statements
-* Character handling
-* Modular arithmetic
-* Basic cryptography
-* Encryption and decryption
-
-## ⚠️ Disclaimer
-
-This project is created for **educational purposes** to demonstrate classical cryptography. The Vigenère Cipher is not considered secure for modern real-world data protection.
+## 🔒 Security Note
+The Vigenère cipher is a historical educational cipher and is **not suitable for modern security**. Repeating-key patterns can make it vulnerable to cryptanalysis. Use established, modern cryptographic algorithms for protecting sensitive information.
 
 ## 👩‍💻 Author
+**Sanjana Mallick**  
+B.Tech Computer Science and Information Technology  
+Cybersecurity
 
-**Sanjana Mallick**
-
-B.Tech CSE – Cybersecurity
-
+## 📜 License
+This project is intended for educational and learning purposes.
